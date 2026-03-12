@@ -1,0 +1,44 @@
+# ============================================================
+# F1 Race Predictor - Dependencies
+# ============================================================
+
+# --- Data Fetching ---
+fastf1==3.4.0              # Official F1 timing & telemetry data
+requests==2.32.3           # HTTP client for OpenF1 REST API
+aiohttp==3.10.5            # Async HTTP (for faster OpenF1 calls)
+
+# --- Data Manipulation ---
+pandas==2.2.2              # DataFrames & data wrangling
+numpy==1.26.4              # Numerical computing
+
+# --- Machine Learning ---
+scikit-learn==1.5.1        # Preprocessing, metrics, baseline models
+xgboost==2.1.1             # Main prediction model (gradient boosting)
+lightgbm==4.5.0            # Alternative boosting model (optional)
+
+# --- Feature Engineering & EDA ---
+matplotlib==3.9.2          # Plotting
+seaborn==0.13.2            # Statistical visualizations
+plotly==5.24.1             # Interactive charts (used in dashboard)
+
+# --- Model Persistence ---
+joblib==1.4.2              # Save/load trained models (.pkl files)
+
+# --- Dashboard ---
+streamlit==1.38.0          # Web dashboard UI
+
+# --- Notebooks ---
+jupyter==1.1.1             # Jupyter notebook support
+ipykernel==6.29.5          # Notebook kernel
+
+# --- Utilities ---
+python-dotenv==1.0.1       # Load env variables from .env file
+tqdm==4.66.5               # Progress bars for data loading
+loguru==0.7.2              # Clean logging
+
+# ============================================================
+# Setup Instructions:
+#   python -m venv venv
+#   source venv/bin/activate      # On Windows: venv\Scripts\activate
+#   pip install -r requirements.txt
+# ============================================================
