@@ -1,0 +1,87 @@
+column,code,label
+circuit_short_name,0,Austin
+circuit_short_name,1,Baku
+circuit_short_name,2,Catalunya
+circuit_short_name,3,Hungaroring
+circuit_short_name,4,Imola
+circuit_short_name,5,Interlagos
+circuit_short_name,6,Jeddah
+circuit_short_name,7,Las Vegas
+circuit_short_name,8,Lusail
+circuit_short_name,9,Melbourne
+circuit_short_name,10,Mexico City
+circuit_short_name,11,Miami
+circuit_short_name,12,Monte Carlo
+circuit_short_name,13,Montreal
+circuit_short_name,14,Monza
+circuit_short_name,15,Sakhir
+circuit_short_name,16,Shanghai
+circuit_short_name,17,Silverstone
+circuit_short_name,18,Singapore
+circuit_short_name,19,Spa-Francorchamps
+circuit_short_name,20,Spielberg
+circuit_short_name,21,Suzuka
+circuit_short_name,22,Yas Marina Circuit
+circuit_short_name,23,Zandvoort
+team_name,0,Alfa Romeo
+team_name,1,AlphaTauri
+team_name,2,Alpine
+team_name,3,Aston Martin
+team_name,4,Audi
+team_name,5,Cadillac
+team_name,6,Ferrari
+team_name,7,Haas F1 Team
+team_name,8,Kick Sauber
+team_name,9,McLaren
+team_name,10,Mercedes
+team_name,11,RB
+team_name,12,Racing Bulls
+team_name,13,Red Bull Racing
+team_name,14,Williams
+name_acronym,0,ALB
+name_acronym,1,ALO
+name_acronym,2,ANT
+name_acronym,3,BEA
+name_acronym,4,BOR
+name_acronym,5,BOT
+name_acronym,6,COL
+name_acronym,7,DEV
+name_acronym,8,DOO
+name_acronym,9,GAS
+name_acronym,10,HAD
+name_acronym,11,HAM
+name_acronym,12,HUL
+name_acronym,13,LAW
+name_acronym,14,LEC
+name_acronym,15,LIN
+name_acronym,16,MAG
+name_acronym,17,NOR
+name_acronym,18,OCO
+name_acronym,19,PER
+name_acronym,20,PIA
+name_acronym,21,RIC
+name_acronym,22,RUS
+name_acronym,23,SAI
+name_acronym,24,SAR
+name_acronym,25,STR
+name_acronym,26,TSU
+name_acronym,27,VER
+name_acronym,28,ZHO
+country_code,0,ARG
+country_code,1,AUS
+country_code,2,CAN
+country_code,3,CHN
+country_code,4,DEN
+country_code,5,ESP
+country_code,6,FIN
+country_code,7,FRA
+country_code,8,GBR
+country_code,9,GER
+country_code,10,JPN
+country_code,11,MEX
+country_code,12,MON
+country_code,13,NED
+country_code,14,NZL
+country_code,15,THA
+country_code,16,USA
+country_code,17,Unknown

@@ -1,0 +1,15 @@
+feature,importance
+driver_champ_rank_before,0.27084568
+avg_points_last3,0.24899475
+constructor_champ_rank_before,0.054604832
+races_completed_this_season,0.044154525
+rainfall_flag,0.042180452
+avg_pit_duration,0.040670104
+team_name_encoded,0.039420027
+constructor_champ_pts_before,0.039266907
+pit_stop_count,0.03916289
+driver_champ_pts_before,0.03890612
+track_temperature,0.038724855
+air_temperature,0.037827313
+avg_finish_last3,0.03699769
+circuit_short_name_encoded,0.02824377
