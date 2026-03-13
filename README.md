@@ -1,9 +1,10 @@
 # 🏎️ F1 Race Predictor
 
-A machine learning pipeline that predicts **Formula 1 race winners and full finishing order** using real telemetry and historical data from the [OpenF1](https://openf1.org/) and [FastF1](https://docs.fastf1.dev/) APIs.
+A machine learning pipeline that predicts **Formula 1 race winners and full finishing order** using real historical data from the [OpenF1](https://openf1.org/) API.
 
 > Built as a portfolio project to explore ML with real-world motorsport data.
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Streamlit-FF4B4B?style=for-the-badge)](https://hamhoumf1racepredictor.streamlit.app)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
 ![XGBoost](https://img.shields.io/badge/Model-XGBoost-orange)
 ![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-red?logo=streamlit)
@@ -11,9 +12,9 @@ A machine learning pipeline that predicts **Formula 1 race winners and full fini
 
 ---
 
-## 📸 Demo
+## 🚀 Live Demo
 
-> *(Screenshot of Streamlit dashboard — coming soon)*
+**[👉 hamhoumf1racepredictor.streamlit.app](https://hamhoumf1racepredictor.streamlit.app)**
 
 ---
 
@@ -22,8 +23,54 @@ A machine learning pipeline that predicts **Formula 1 race winners and full fini
 | Target | Description |
 |---|---|
 | 🥇 **Race Winner** | The driver most likely to finish 1st |
-| 🏆 **Podium (Top 3)** | Probability each driver finishes on the podium |
-| 📋 **Full Finishing Order** | Ranked list of all drivers for a given race |
+| 🏆 **Podium (Top 3)** | Which 3 drivers will finish on the podium |
+| 📋 **Full Finishing Order** | Ranked prediction for all 20 drivers |
+
+---
+
+## 📊 Model Results
+
+Trained on **2023 + 2024** seasons, tested on the full **2025** season (30 races):
+
+| Metric | Score | Meaning |
+|---|---|---|
+| 🥇 **Winner Accuracy** | **30.0%** | Correctly predicted the winner in 9/30 races |
+| 🏆 **Podium Accuracy** | **56.7%** | Got more than half the podium right on average |
+| 📈 **Spearman Rank Corr** | **0.614** | Strong correlation between predicted and actual order |
+| 📉 **Avg Position Error** | **3.71** | Average miss of ~3-4 positions per driver |
+
+> **Context:** a random baseline predicts the winner ~5% of the time (1 in 20 drivers).
+> This model is **6× better than random** on winner prediction.
+
+### 🏆 Best Race: Jeddah Round 6
+- ✅ Winner correct (PIA — McLaren)
+- 🏆 2/3 podium correct
+- 📈 0.88 rank correlation — near-perfect grid order prediction
+
+---
+
+## 🧠 How It Works
+
+### Pipeline
+```
+OpenF1 API → raw CSVs → feature engineering → ml_dataset.csv → XGBoost → predictions
+```
+
+### Features
+
+| Feature | Why It Matters |
+|---|---|
+| Driver championship rank | Best proxy for overall pace + skill |
+| Avg points (last 3 races) | Captures current momentum |
+| Constructor championship rank | Team car performance |
+| Rainfall flag | Wet races reshuffle the grid |
+| Avg pit stop duration | Strategy efficiency |
+| Circuit (encoded) | Some drivers excel at specific tracks |
+| Team (encoded) | Constructor pace varies by circuit |
+
+### Model
+**XGBoost Regressor** — predicts a finish score per driver per race.
+Drivers are ranked by score within each race to produce the full predicted order.
 
 ---
 
@@ -32,167 +79,74 @@ A machine learning pipeline that predicts **Formula 1 race winners and full fini
 ```
 f1-race-predictor/
 │
-├── data/                        # Raw & processed data (git-ignored)
-│   ├── raw/
-│   └── processed/
-│
-├── notebooks/                   # Exploration & experimentation
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   └── 03_model_training.ipynb
+├── data/
+│   ├── raw/                     # Raw CSVs from OpenF1 API
+│   └── processed/               # ML-ready dataset + predictions
 │
 ├── src/
 │   ├── data/
-│   │   ├── fetch_openf1.py      # OpenF1 API client
-│   │   ├── fetch_fastf1.py      # FastF1 data loader
-│   │   └── preprocess.py        # Cleaning & merging
-│   │
-│   ├── features/
-│   │   └── engineer.py          # Feature creation logic
-│   │
+│   │   ├── fetch_openf1.py      # OpenF1 API client (rate-limit aware)
+│   │   └── preprocess.py        # Feature engineering pipeline
 │   ├── models/
-│   │   ├── train.py             # Model training
-│   │   ├── predict.py           # Run predictions
-│   │   └── evaluate.py          # Metrics & scoring
-│   │
+│   │   └── train.py             # XGBoost training + evaluation
 │   └── dashboard/
 │       └── app.py               # Streamlit dashboard
 │
 ├── models/                      # Saved trained models (.pkl)
 ├── requirements.txt
-├── .env.example                 # Environment variable template
-├── run_pipeline.py              # One command to run everything
 └── README.md
 ```
 
 ---
 
-## ⚙️ Setup
+## ⚙️ Run Locally
 
-### 1. Clone the repo
 ```bash
+# 1. Clone & setup
 git clone https://github.com/YOUR_USERNAME/f1-race-predictor.git
 cd f1-race-predictor
-```
-
-### 2. Create a virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate        # On Windows: venv\Scripts\activate
-```
-
-### 3. Install dependencies
-```bash
+python -m venv venv && venv\Scripts\activate
 pip install -r requirements.txt
-```
 
-### 4. Configure environment
-```bash
-cp .env.example .env
-# No API keys needed — OpenF1 and FastF1 are both free & open!
-```
+# 2. Fetch data (takes ~20 min, respects API rate limits automatically)
+python src/data/fetch_openf1.py
 
----
+# 3. Preprocess + engineer features
+python src/data/preprocess.py
 
-## 🚀 Usage
+# 4. Train model
+python src/models/train.py
 
-### Run the full pipeline (fetch → features → train → predict)
-```bash
-python run_pipeline.py
-```
-
-### Launch the Streamlit dashboard
-```bash
+# 5. Launch dashboard
 streamlit run src/dashboard/app.py
 ```
-
-### Explore the notebooks
-```bash
-jupyter notebook notebooks/
-```
-
----
-
-## 🧠 ML Approach
-
-### Model
-We use **XGBoost** with a ranking objective — for each race, the model scores every driver and ranks them by predicted finish position.
-
-### Features (Phase 1)
-| Feature | Source |
-|---|---|
-| Qualifying position | FastF1 |
-| Gap to pole (seconds) | FastF1 |
-| Driver championship standing | FastF1 |
-| Constructor championship standing | FastF1 |
-| Circuit (encoded) | FastF1 |
-
-### Features (Phase 2 — planned)
-| Feature | Source |
-|---|---|
-| Driver recent form (avg finish, last 3 races) | FastF1 |
-| Circuit-specific historical performance | FastF1 |
-| Pit stop count & strategy | OpenF1 |
-| Weather (rainfall, temperature) | OpenF1 |
-| Lap time consistency (std dev) | FastF1 |
-
-### Evaluation Metrics
-- **Top-1 Accuracy** — Did we predict the winner correctly?
-- **Top-3 Accuracy** — Did we predict all 3 podium finishers?
-- **Spearman Rank Correlation** — How well does our full order match reality?
-
----
-
-## 📊 Results
-
-> *(Model performance metrics will be added after training)*
-
-| Metric | Score |
-|---|---|
-| Winner accuracy | TBD |
-| Podium accuracy | TBD |
-| Rank correlation | TBD |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Project structure & setup
-- [ ] OpenF1 data fetcher (`fetch_openf1.py`)
-- [ ] FastF1 data loader (`fetch_fastf1.py`)
-- [ ] Data exploration notebook
-- [ ] Feature engineering pipeline
-- [ ] XGBoost model training
-- [ ] Model evaluation & backtesting
-- [ ] Streamlit dashboard
+- [x] OpenF1 data fetcher with automatic rate-limit handling
+- [x] Feature engineering (standings, form, weather, pit stops)
+- [x] XGBoost model — winner + full finishing order prediction
+- [x] Streamlit dashboard with 4 pages
+- [x] Deployed live on Streamlit Cloud
+- [ ] Add qualifying position as a feature
+- [ ] Circuit-specific model variants
+- [ ] Predict upcoming race (live current season data)
 - [ ] Docker support
 
 ---
 
-## 🔌 APIs Used
+## 🔌 API
 
-| API | Docs | Cost |
+| API | Cost | Rate Limit |
 |---|---|---|
-| [OpenF1](https://openf1.org/) | [openf1.org/docs](https://openf1.org/) | Free |
-| [FastF1](https://docs.fastf1.dev/) | [docs.fastf1.dev](https://docs.fastf1.dev/) | Free |
+| [OpenF1](https://openf1.org/) | Free & open | 4 req/sec, 500 req/hour |
 
----
-
-## 📚 Learning Resources
-
-- [FastF1 Getting Started](https://docs.fastf1.dev/tutorial.html)
-- [XGBoost Documentation](https://xgboost.readthedocs.io/)
-- [Scikit-learn User Guide](https://scikit-learn.org/stable/user_guide.html)
-- [Streamlit Docs](https://docs.streamlit.io/)
-
----
-
-## 🤝 Contributing
-
-Pull requests welcome! If you're also learning F1 + ML, feel free to fork this and experiment.
+Rate limits are handled automatically — the fetcher backs off and retries on 429 errors.
 
 ---
 
 ## 📄 License
 
-MIT — use it, learn from it, improve it.
+MIT — use it, learn from it, build on it.
